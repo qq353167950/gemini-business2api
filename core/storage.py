@@ -24,6 +24,7 @@ logger = logging.getLogger(__name__)
 
 _db_pool = None
 _db_pool_lock = None
+_db_pool_reset_lock = None
 _db_loop = None
 _db_thread = None
 _db_loop_lock = threading.Lock()
@@ -201,6 +202,8 @@ async def _get_pool():
                 min_size=0,
                 max_size=10,
                 command_timeout=30,
+                # Keep idle connections short-lived to reduce stale/free-tier disconnect issues.
+                max_inactive_connection_lifetime=120,
             )
             await _init_tables(_db_pool)
             logger.info("[STORAGE] PostgreSQL pool initialized")
@@ -215,14 +218,30 @@ async def _get_pool():
 
 async def _reset_pool():
     """Close and recreate the connection pool (called on stale connection errors)."""
-    global _db_pool
-    if _db_pool is not None:
+    global _db_pool, _db_pool_reset_lock
+    if _db_pool_reset_lock is None:
+        _db_pool_reset_lock = asyncio.Lock()
+
+    async with _db_pool_reset_lock:
+        if _db_pool is None:
+            return await _get_pool()
+
+        pool = _db_pool
+
+        # Prefer expiring pool connections first to avoid interrupting in-flight work.
         try:
-            await _db_pool.close()
+            await pool.expire_connections()
+            logger.info("[STORAGE] PostgreSQL connections expired; pool will refresh gradually")
+            return pool
+        except Exception as expire_err:
+            logger.warning(f"[STORAGE] Failed to expire pool connections, fallback to full reset: {expire_err}")
+
+        try:
+            await pool.close()
         except Exception:
             pass
         _db_pool = None
-    return await _get_pool()
+        return await _get_pool()
 
 
 from contextlib import asynccontextmanager
@@ -231,16 +250,34 @@ from contextlib import asynccontextmanager
 async def _pg_acquire():
     """Acquire a connection with automatic retry on stale connection errors."""
     import asyncpg
+    postgres_conn_error = getattr(asyncpg, "PostgresConnectionError", asyncpg.InterfaceError)
+    retryable_errors = (
+        asyncpg.ConnectionDoesNotExistError,
+        asyncpg.InterfaceError,
+        postgres_conn_error,
+        OSError,
+    )
     pool = await _get_pool()
+    conn = None
     try:
-        async with pool.acquire() as conn:
-            yield conn
-    except (asyncpg.ConnectionDoesNotExistError,
-            asyncpg.InterfaceError,
-            OSError) as e:
+        conn = await pool.acquire()
+        yield conn
+    except retryable_errors as e:
+        # Remove potentially broken connection from pool as early as possible.
+        if conn is not None:
+            try:
+                conn.terminate()
+            except Exception:
+                pass
         logger.warning(f"[STORAGE] Connection lost, resetting pool: {e}")
         await _reset_pool()
         raise
+    finally:
+        if conn is not None:
+            try:
+                await pool.release(conn)
+            except Exception:
+                pass
 
 
 async def _init_tables(pool) -> None:
