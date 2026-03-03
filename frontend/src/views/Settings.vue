@@ -268,6 +268,27 @@
                   />
                 </template>
 
+                <!-- Gmailnator 配置 -->
+                <template v-if="localSettings.basic.temp_mail_provider === 'gmailnator'">
+                  <Checkbox v-model="localSettings.basic.gmailnator_verify_ssl">
+                    Gmailnator SSL 校验
+                  </Checkbox>
+                  <label class="block text-xs text-muted-foreground">Gmailnator API 地址</label>
+                  <input
+                    v-model="localSettings.basic.gmailnator_base_url"
+                    type="text"
+                    class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-sm"
+                    placeholder="https://gmailnator.p.rapidapi.com"
+                  />
+                  <label class="block text-xs text-muted-foreground">RapidAPI Key</label>
+                  <input
+                    v-model="localSettings.basic.gmailnator_api_key"
+                    type="text"
+                    class="w-full rounded-2xl border border-input bg-background px-3 py-2 text-sm"
+                    placeholder="your-rapidapi-key"
+                  />
+                </template>
+
                 <label class="block text-xs text-muted-foreground">默认注册数量</label>
                 <input
                   v-model.number="localSettings.basic.register_default_count"
@@ -552,6 +573,11 @@ watch(settings, (value) => {
   next.basic.cfmail_domain = typeof next.basic.cfmail_domain === 'string'
     ? next.basic.cfmail_domain
     : ''
+  next.basic.gmailnator_base_url = next.basic.gmailnator_base_url || 'https://gmailnator.p.rapidapi.com'
+  next.basic.gmailnator_api_key = typeof next.basic.gmailnator_api_key === 'string'
+    ? next.basic.gmailnator_api_key
+    : ''
+  next.basic.gmailnator_verify_ssl = next.basic.gmailnator_verify_ssl ?? true
   next.retry = next.retry || {}
   next.retry.auto_refresh_accounts_seconds = Number.isFinite(next.retry.auto_refresh_accounts_seconds)
     ? next.retry.auto_refresh_accounts_seconds

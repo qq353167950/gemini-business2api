@@ -194,6 +194,10 @@ class RegisterService(BaseTaskService[RegisterTask]):
             log_cb("error", "❌ Freemail JWT Token 未配置")
             return {"success": False, "error": "Freemail JWT Token 未配置"}
 
+        if temp_mail_provider == "gmailnator" and not config.basic.gmailnator_api_key:
+            log_cb("error", "❌ Gmailnator RapidAPI Key 未配置")
+            return {"success": False, "error": "Gmailnator RapidAPI Key 未配置"}
+
         client = create_temp_mail_client(
             temp_mail_provider,
             domain=domain,
@@ -257,6 +261,11 @@ class RegisterService(BaseTaskService[RegisterTask]):
             config_data["mail_api_key"] = config.basic.cfmail_api_key
             config_data["mail_verify_ssl"] = config.basic.cfmail_verify_ssl
             config_data["mail_domain"] = config.basic.cfmail_domain
+        elif temp_mail_provider == "gmailnator":
+            config_data["mail_password"] = ""
+            config_data["mail_base_url"] = config.basic.gmailnator_base_url
+            config_data["mail_api_key"] = config.basic.gmailnator_api_key
+            config_data["mail_verify_ssl"] = config.basic.gmailnator_verify_ssl
         elif temp_mail_provider == "moemail":
             config_data["mail_password"] = getattr(client, "email_id", "") or getattr(client, "password", "")
             config_data["mail_base_url"] = config.basic.moemail_base_url

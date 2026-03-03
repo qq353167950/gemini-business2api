@@ -72,10 +72,12 @@
 **Supports ARM64 and AMD64 architectures**
 
 ```bash
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 cp .env.example .env
 # Edit .env to set ADMIN_KEY
+# Optional: use your own published image
+IMAGE_NAME=<your-dockerhub-username>/gemini-business2api:latest
 
 docker-compose up -d
 
@@ -86,6 +88,18 @@ docker-compose logs -f
 docker-compose pull && docker-compose up -d
 ```
 
+#### Use Your Own Docker Image
+
+```bash
+# 1) Build and push your image
+docker build -t <your-dockerhub-username>/gemini-business2api:latest .
+docker push <your-dockerhub-username>/gemini-business2api:latest
+
+# 2) Tell docker-compose to use your image
+echo "IMAGE_NAME=<your-dockerhub-username>/gemini-business2api:latest" >> .env
+docker-compose up -d
+```
+
 ---
 
 ### Method 2: Setup Script
@@ -94,7 +108,7 @@ docker-compose pull && docker-compose up -d
 
 **Linux / macOS / WSL:**
 ```bash
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 bash setup.sh
 # Edit .env to set ADMIN_KEY
@@ -106,7 +120,7 @@ pm2 start main.py --name gemini-api --interpreter ./.venv/bin/python3
 
 **Windows:**
 ```cmd
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 setup.bat
 # Edit .env to set ADMIN_KEY
@@ -124,7 +138,7 @@ To update, simply re-run the same script.
 ### Method 3: Manual Deployment
 
 ```bash
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -231,7 +245,7 @@ curl http://localhost:7860/v1/chat/completions \
 
 ## 📧 Email Provider Configuration
 
-The project supports 4 temporary email providers for automatic account registration. Switch and configure them in **Admin Panel → System Settings → Temp Email Provider**.
+The project supports 6 temporary email providers for automatic account registration. Switch and configure them in **Admin Panel → System Settings → Temp Email Provider**.
 
 ### Moemail (Default)
 
@@ -263,6 +277,19 @@ Self-hosted temporary email service, for users with their own servers.
 - **Project**: [github.com/idinging/freemail](https://github.com/idinging/freemail)
 - **Config**: Self-hosted service URL + JWT Token + Domain (optional)
 
+### Cloudflare Mail
+
+For Cloudflare Mail API based deployments.
+
+- **Config**: API URL + Access Password (`x-custom-auth`, optional) + Domain (optional)
+
+### Gmailnator
+
+Temporary mailbox service via RapidAPI.
+
+- **Default URL**: `https://gmailnator.p.rapidapi.com`
+- **Config**: API URL + RapidAPI Key
+
 > **Tip**: All email settings are configured in the admin panel. Microsoft email login is also handled through the admin panel.
 
 ---
@@ -279,7 +306,7 @@ In addition to local Docker Compose, these platforms support Docker image deploy
 | [Claw Cloud](https://claw.cloud) | ✅ Yes | Container cloud, simple and easy |
 | Self-hosted VPS (Recommended) | — | Full control with Docker Compose |
 
-> Docker image: `cooooookk/gemini-business2api:latest`
+> Docker image: `${IMAGE_NAME:-cooooookk/gemini-business2api:latest}`
 >
 > Set `ADMIN_KEY` and `DATABASE_URL` environment variables when deploying.
 
@@ -310,10 +337,10 @@ In addition to local Docker Compose, these platforms support Docker image deploy
 
 ## 🔄 Standalone Refresh Service
 
-To deploy the account refresh service separately from the main API, use the [`refresh-worker` branch](https://github.com/Dreamy-rain/gemini-business2api/tree/refresh-worker):
+To deploy the account refresh service separately from the main API, use the [`refresh-worker` branch](https://github.com/your-github-username/gemini-business2api/tree/refresh-worker):
 
 ```bash
-git clone -b refresh-worker https://github.com/Dreamy-rain/gemini-business2api.git gemini-refresh-worker
+git clone -b refresh-worker https://github.com/your-github-username/gemini-business2api.git gemini-refresh-worker
 cd gemini-refresh-worker
 cp .env.example .env
 # Edit .env to set DATABASE_URL
@@ -372,6 +399,6 @@ Configure a proxy when auto-registering/refreshing accounts to improve success r
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Dreamy-rain/gemini-business2api&type=date&legend=top-left)](https://www.star-history.com/#Dreamy-rain/gemini-business2api&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=your-github-username/gemini-business2api&type=date&legend=top-left)](https://www.star-history.com/#your-github-username/gemini-business2api&type=date&legend=top-left)
 
 **If this project helps you, please give it a ⭐ Star!**

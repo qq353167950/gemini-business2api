@@ -78,7 +78,7 @@ export interface Stats {
   requests_per_hour: number
 }
 
-export type TempMailProvider = 'duckmail' | 'moemail' | 'freemail' | 'gptmail' | 'cfmail'
+export type TempMailProvider = 'duckmail' | 'moemail' | 'freemail' | 'gptmail' | 'cfmail' | 'gmailnator'
 
 export interface Settings {
   basic: {
@@ -106,6 +106,9 @@ export interface Settings {
     cfmail_api_key?: string
     cfmail_verify_ssl?: boolean
     cfmail_domain?: string
+    gmailnator_base_url?: string
+    gmailnator_api_key?: string
+    gmailnator_verify_ssl?: boolean
     browser_engine?: string
     browser_headless?: boolean
     refresh_window_hours?: number

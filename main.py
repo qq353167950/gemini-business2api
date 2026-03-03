@@ -1672,6 +1672,9 @@ async def admin_get_settings(request: Request):
             "cfmail_api_key": config.basic.cfmail_api_key,
             "cfmail_verify_ssl": config.basic.cfmail_verify_ssl,
             "cfmail_domain": config.basic.cfmail_domain,
+            "gmailnator_base_url": config.basic.gmailnator_base_url,
+            "gmailnator_api_key": config.basic.gmailnator_api_key,
+            "gmailnator_verify_ssl": config.basic.gmailnator_verify_ssl,
             "browser_engine": config.basic.browser_engine,
             "browser_headless": config.basic.browser_headless,
             "refresh_window_hours": config.basic.refresh_window_hours,
@@ -1749,6 +1752,9 @@ async def admin_update_settings(request: Request, new_settings: dict = Body(...)
         basic.setdefault("cfmail_api_key", config.basic.cfmail_api_key)
         basic.setdefault("cfmail_verify_ssl", config.basic.cfmail_verify_ssl)
         basic.setdefault("cfmail_domain", config.basic.cfmail_domain)
+        basic.setdefault("gmailnator_base_url", config.basic.gmailnator_base_url)
+        basic.setdefault("gmailnator_api_key", config.basic.gmailnator_api_key)
+        basic.setdefault("gmailnator_verify_ssl", config.basic.gmailnator_verify_ssl)
         basic.setdefault("browser_engine", config.basic.browser_engine)
         basic.setdefault("browser_headless", config.basic.browser_headless)
         basic.setdefault("refresh_window_hours", config.basic.refresh_window_hours)

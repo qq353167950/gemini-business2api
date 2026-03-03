@@ -241,12 +241,14 @@ class LoginService(BaseTaskService[LoginTask]):
                 log_callback=log_cb,
             )
             client.set_credentials(mail_address)
-        elif mail_provider in ("duckmail", "moemail", "freemail", "gptmail", "cfmail"):
-            if mail_provider not in ("freemail", "gptmail", "cfmail") and not mail_password:
+        elif mail_provider in ("duckmail", "moemail", "freemail", "gptmail", "cfmail", "gmailnator"):
+            if mail_provider not in ("freemail", "gptmail", "cfmail", "gmailnator") and not mail_password:
                 error_message = "邮箱密码缺失" if mail_provider == "duckmail" else "mail password (email_id) missing"
                 return {"success": False, "email": account_id, "error": error_message}
             if mail_provider == "freemail" and not account.get("mail_jwt_token") and not config.basic.freemail_jwt_token:
                 return {"success": False, "email": account_id, "error": "Freemail JWT Token 未配置"}
+            if mail_provider == "gmailnator" and not account.get("mail_api_key") and not config.basic.gmailnator_api_key:
+                return {"success": False, "email": account_id, "error": "Gmailnator RapidAPI Key 未配置"}
 
             # 创建邮件客户端，优先使用账户级别配置
             mail_address = account.get("mail_address") or account_id
@@ -304,7 +306,7 @@ class LoginService(BaseTaskService[LoginTask]):
         # 更新账户配置
         config_data = result["config"]
         config_data["mail_provider"] = mail_provider
-        if mail_provider in ("freemail", "gptmail"):
+        if mail_provider in ("freemail", "gptmail", "gmailnator"):
             config_data["mail_password"] = ""
         elif mail_provider == "cfmail":
             config_data["mail_password"] = mail_password  # 保留 JWT token
@@ -369,6 +371,10 @@ class LoginService(BaseTaskService[LoginTask]):
             elif mail_provider == "gptmail":
                 # GPTMail 不需要密码，允许直接刷新
                 pass
+            elif mail_provider == "gmailnator":
+                # Gmailnator requires RapidAPI key (account-level or global).
+                if not account.get("mail_api_key") and not config.basic.gmailnator_api_key:
+                    continue
             elif mail_provider == "cfmail":
                 # cfmail 需要 JWT token（存在 mail_password 中）或全局配置
                 if not mail_password and not config.basic.cfmail_api_key:

@@ -5,6 +5,7 @@ from core.proxy_utils import extract_host, no_proxy_matches, parse_proxy_setting
 from core.cfmail_client import CloudflareMailClient
 from core.duckmail_client import DuckMailClient
 from core.freemail_client import FreemailClient
+from core.gmailnator_client import GmailnatorClient
 from core.gptmail_client import GPTMailClient
 from core.moemail_client import MoemailClient
 
@@ -79,6 +80,18 @@ def create_temp_mail_client(
             api_key=api_key or config.basic.cfmail_api_key,
             domain=domain or config.basic.cfmail_domain,
             verify_ssl=verify_ssl if verify_ssl is not None else config.basic.cfmail_verify_ssl,
+            log_callback=log_cb,
+        )
+
+    if provider == "gmailnator":
+        effective_base_url = base_url or config.basic.gmailnator_base_url
+        if no_proxy_matches(extract_host(effective_base_url), no_proxy):
+            proxy = ""
+        return GmailnatorClient(
+            base_url=effective_base_url,
+            api_key=api_key or config.basic.gmailnator_api_key,
+            proxy=proxy,
+            verify_ssl=verify_ssl if verify_ssl is not None else config.basic.gmailnator_verify_ssl,
             log_callback=log_cb,
         )
 

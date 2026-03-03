@@ -73,10 +73,12 @@
 **支持 ARM64 和 AMD64 架构**
 
 ```bash
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 cp .env.example .env
 # 编辑 .env 设置 ADMIN_KEY
+# 可选：使用你自己的镜像
+IMAGE_NAME=<your-dockerhub-username>/gemini-business2api:latest
 
 docker-compose up -d
 
@@ -87,6 +89,18 @@ docker-compose logs -f
 docker-compose pull && docker-compose up -d
 ```
 
+#### 使用你自己的 Docker 镜像
+
+```bash
+# 1) 构建并推送你的镜像
+docker build -t <your-dockerhub-username>/gemini-business2api:latest .
+docker push <your-dockerhub-username>/gemini-business2api:latest
+
+# 2) 让 docker-compose 使用你的镜像
+echo "IMAGE_NAME=<your-dockerhub-username>/gemini-business2api:latest" >> .env
+docker-compose up -d
+```
+
 ---
 
 ### 方式二：安装脚本
@@ -95,7 +109,7 @@ docker-compose pull && docker-compose up -d
 
 **Linux / macOS / WSL：**
 ```bash
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 bash setup.sh
 # 编辑 .env 设置 ADMIN_KEY
@@ -107,7 +121,7 @@ pm2 start main.py --name gemini-api --interpreter ./.venv/bin/python3
 
 **Windows：**
 ```cmd
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 setup.bat
 # 编辑 .env 设置 ADMIN_KEY
@@ -125,7 +139,7 @@ pm2 start main.py --name gemini-api --interpreter ./.venv/Scripts/python.exe
 ### 方式三：手动部署
 
 ```bash
-git clone https://github.com/Dreamy-rain/gemini-business2api.git
+git clone https://github.com/your-github-username/gemini-business2api.git
 cd gemini-business2api
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -233,7 +247,7 @@ curl http://localhost:7860/v1/chat/completions \
 
 ## 📧 邮箱提供商配置
 
-项目支持 4 种临时邮箱，用于自动注册账号。在 **管理面板 → 系统设置 → 临时邮箱提供商** 中切换。
+项目支持 6 种临时邮箱，用于自动注册账号。在 **管理面板 → 系统设置 → 临时邮箱提供商** 中切换。
 
 ### Moemail（默认推荐）
 
@@ -265,6 +279,19 @@ curl http://localhost:7860/v1/chat/completions \
 - **项目地址**：[github.com/idinging/freemail](https://github.com/idinging/freemail)
 - **配置项**：自部署服务地址 + JWT Token + 域名（可选）
 
+### Cloudflare Mail
+
+适用于 Cloudflare Mail API 服务。
+
+- **配置项**：API 地址 + 访问密码（x-custom-auth，可选）+ 域名（可选）
+
+### Gmailnator
+
+基于 RapidAPI 的临时邮箱服务。
+
+- **默认地址**：`https://gmailnator.p.rapidapi.com`
+- **配置项**：API 地址 + RapidAPI Key
+
 > **提示**：所有邮箱配置均在管理面板中完成，无需手动编辑配置文件。Microsoft 邮箱登录也在管理面板中操作。
 
 ---
@@ -281,7 +308,7 @@ curl http://localhost:7860/v1/chat/completions \
 | [Claw Cloud](https://claw.cloud) | ✅ 有 | 容器云平台，简单易用 |
 | 自建 VPS（推荐） | — | 完全可控，配合 Docker Compose |
 
-> Docker 镜像：`cooooookk/gemini-business2api:latest`
+> Docker 镜像：`${IMAGE_NAME:-cooooookk/gemini-business2api:latest}`
 >
 > 部署时设置环境变量 `ADMIN_KEY` 和 `DATABASE_URL` 即可。
 
@@ -312,10 +339,10 @@ curl http://localhost:7860/v1/chat/completions \
 
 ## 🔄 独立刷新服务
 
-如果需要将账号刷新服务单独部署（与主 API 分离），可使用 [`refresh-worker` 分支](https://github.com/Dreamy-rain/gemini-business2api/tree/refresh-worker)：
+如果需要将账号刷新服务单独部署（与主 API 分离），可使用 [`refresh-worker` 分支](https://github.com/your-github-username/gemini-business2api/tree/refresh-worker)：
 
 ```bash
-git clone -b refresh-worker https://github.com/Dreamy-rain/gemini-business2api.git gemini-refresh-worker
+git clone -b refresh-worker https://github.com/your-github-username/gemini-business2api.git gemini-refresh-worker
 cd gemini-refresh-worker
 cp .env.example .env
 # 编辑 .env 设置 DATABASE_URL
@@ -374,6 +401,6 @@ docker-compose up -d
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Dreamy-rain/gemini-business2api&type=date&legend=top-left)](https://www.star-history.com/#Dreamy-rain/gemini-business2api&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=your-github-username/gemini-business2api&type=date&legend=top-left)](https://www.star-history.com/#your-github-username/gemini-business2api&type=date&legend=top-left)
 
 **如果这个项目对你有帮助，请给个 ⭐ Star!**
