@@ -1,6 +1,6 @@
 services:
   gemini-api:
-    image: ${IMAGE_NAME:-cooooookk/gemini-business2api:latest}
+    image: ${IMAGE_NAME:-qq353167950/gemini-business2api:latest}
     container_name: gemini-business2api
     ports:
       - "7860:7860"

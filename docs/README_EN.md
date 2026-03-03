@@ -72,12 +72,12 @@
 **Supports ARM64 and AMD64 architectures**
 
 ```bash
-git clone https://github.com/your-github-username/gemini-business2api.git
+git clone https://github.com/qq353167950/gemini-business2api.git
 cd gemini-business2api
 cp .env.example .env
 # Edit .env to set ADMIN_KEY
 # Optional: use your own published image
-IMAGE_NAME=<your-dockerhub-username>/gemini-business2api:latest
+IMAGE_NAME=qq353167950/gemini-business2api:latest
 
 docker-compose up -d
 
@@ -92,11 +92,11 @@ docker-compose pull && docker-compose up -d
 
 ```bash
 # 1) Build and push your image
-docker build -t <your-dockerhub-username>/gemini-business2api:latest .
-docker push <your-dockerhub-username>/gemini-business2api:latest
+docker build -t qq353167950/gemini-business2api:latest .
+docker push qq353167950/gemini-business2api:latest
 
 # 2) Tell docker-compose to use your image
-echo "IMAGE_NAME=<your-dockerhub-username>/gemini-business2api:latest" >> .env
+echo "IMAGE_NAME=qq353167950/gemini-business2api:latest" >> .env
 docker-compose up -d
 ```
 
@@ -108,7 +108,7 @@ docker-compose up -d
 
 **Linux / macOS / WSL:**
 ```bash
-git clone https://github.com/your-github-username/gemini-business2api.git
+git clone https://github.com/qq353167950/gemini-business2api.git
 cd gemini-business2api
 bash setup.sh
 # Edit .env to set ADMIN_KEY
@@ -120,7 +120,7 @@ pm2 start main.py --name gemini-api --interpreter ./.venv/bin/python3
 
 **Windows:**
 ```cmd
-git clone https://github.com/your-github-username/gemini-business2api.git
+git clone https://github.com/qq353167950/gemini-business2api.git
 cd gemini-business2api
 setup.bat
 # Edit .env to set ADMIN_KEY
@@ -138,7 +138,7 @@ To update, simply re-run the same script.
 ### Method 3: Manual Deployment
 
 ```bash
-git clone https://github.com/your-github-username/gemini-business2api.git
+git clone https://github.com/qq353167950/gemini-business2api.git
 cd gemini-business2api
 
 curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -306,7 +306,7 @@ In addition to local Docker Compose, these platforms support Docker image deploy
 | [Claw Cloud](https://claw.cloud) | ✅ Yes | Container cloud, simple and easy |
 | Self-hosted VPS (Recommended) | — | Full control with Docker Compose |
 
-> Docker image: `${IMAGE_NAME:-cooooookk/gemini-business2api:latest}`
+> Docker image: `${IMAGE_NAME:-qq353167950/gemini-business2api:latest}`
 >
 > Set `ADMIN_KEY` and `DATABASE_URL` environment variables when deploying.
 
@@ -337,10 +337,10 @@ In addition to local Docker Compose, these platforms support Docker image deploy
 
 ## 🔄 Standalone Refresh Service
 
-To deploy the account refresh service separately from the main API, use the [`refresh-worker` branch](https://github.com/your-github-username/gemini-business2api/tree/refresh-worker):
+To deploy the account refresh service separately from the main API, use the [`refresh-worker` branch](https://github.com/qq353167950/gemini-business2api/tree/refresh-worker):
 
 ```bash
-git clone -b refresh-worker https://github.com/your-github-username/gemini-business2api.git gemini-refresh-worker
+git clone -b refresh-worker https://github.com/qq353167950/gemini-business2api.git gemini-refresh-worker
 cd gemini-refresh-worker
 cp .env.example .env
 # Edit .env to set DATABASE_URL
@@ -399,6 +399,6 @@ Configure a proxy when auto-registering/refreshing accounts to improve success r
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=your-github-username/gemini-business2api&type=date&legend=top-left)](https://www.star-history.com/#your-github-username/gemini-business2api&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=qq353167950/gemini-business2api&type=date&legend=top-left)](https://www.star-history.com/#qq353167950/gemini-business2api&type=date&legend=top-left)
 
 **If this project helps you, please give it a ⭐ Star!**

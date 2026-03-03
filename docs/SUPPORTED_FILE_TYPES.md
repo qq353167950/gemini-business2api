@@ -378,6 +378,6 @@ curl -X POST http://localhost:7860/v1/v1/chat/completions \
 
 ## 🔗 相关链接
 
-- [项目主页](https://github.com/your-github-username/gemini-business2api)
+- [项目主页](https://github.com/qq353167950/gemini-business2api)
 - [API 文档](README.md)
-- [问题反馈](https://github.com/your-github-username/gemini-business2api/issues)
+- [问题反馈](https://github.com/qq353167950/gemini-business2api/issues)
